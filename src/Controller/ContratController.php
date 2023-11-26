@@ -124,4 +124,41 @@ class ContratController extends AbstractController
 
         // return $this->redirectToRoute('app_contrat_show', ['id' => $contrat->getId()], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/save-signature', name: 'save_signature', methods: ['POST'])]
+    public function saveSignature(Request $request): Response
+    {
+        $signatureDataUrl = $request->request->get('signatureDataUrl');
+
+        // Implement logic to embed the signature in the PDF
+        // Example: Use TCPDF to generate a PDF with the embedded signature
+        $pdf = new \TCPDF();
+        $pdf->AddPage();
+        // ... Add your PDF content
+
+        // Embed the signature image in the PDF
+        $signatureImage = $this->convertDataUrlToImage($signatureDataUrl);
+        $pdf->Image($signatureImage, 50, 50, 100, 50);
+
+        // Output the signed PDF
+        $pdfContent = $pdf->Output('', 'S');
+
+        return new Response($pdfContent, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="signed_document.pdf"',
+        ]);
+    }
+
+    private function convertDataUrlToImage($dataUrl)
+    {
+        // Extract base64-encoded image data
+        $base64Image = explode(',', $dataUrl)[1];
+
+        // Decode base64 data and save it as an image file
+        $imageData = base64_decode($base64Image);
+        $imagePath = sys_get_temp_dir() . '/signature_image.png';
+        file_put_contents($imagePath, $imageData);
+
+        return $imagePath;
+    }
 }

@@ -31,20 +31,28 @@
 
 function saveSignature() {
             var signatureDataUrl = signaturePad.toDataURL(); // Get signature data as a data URL
-
+            let url = 'https://127.0.0.1:8000/save-signature'
             // Send the signatureDataUrl to your Symfony backend
             // For example, you can use AJAX to send it to a Symfony controller
             // The controller can then embed the signature in the PDF
             // and return the signed PDF to be displayed or downloaded
 
-            // Example AJAX call (requires jQuery):
-            /*
-            $.post('/save-signature', { signatureDataUrl: signatureDataUrl }, function(response) {
-                // Handle the response (e.g., display the signed PDF)
-                console.log(response);
-            });
-            */
-        }
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Adjust the content type if necessary
+                },
+                body: JSON.stringify({ signatureDataUrl: signatureDataUrl }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response (e.g., display the signed PDF)
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                    }
 
     
     </script>
