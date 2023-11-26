@@ -1,0 +1,54 @@
+{# <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Le contrat de location</h1>
+
+    Entre {{contrat.prenom }} {{contrat.nom}} et Jean-Bernard le vieux voleur de mes couilles.
+</body>
+</html> #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Contrat{% endblock %}
+
+{% block body %}
+<h1>Sign the PDF</h1>
+    <canvas id="signature-pad" width="400" height="200"></canvas>
+    <button onclick="saveSignature()">Save Signature</button>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+
+    var canvas = document.getElementById('signature-pad');            
+    var signaturePad = new SignaturePad(canvas);
+    console.log(canvas)
+
+function saveSignature() {
+            var signatureDataUrl = signaturePad.toDataURL(); // Get signature data as a data URL
+
+            // Send the signatureDataUrl to your Symfony backend
+            // For example, you can use AJAX to send it to a Symfony controller
+            // The controller can then embed the signature in the PDF
+            // and return the signed PDF to be displayed or downloaded
+
+            // Example AJAX call (requires jQuery):
+            /*
+            $.post('/save-signature', { signatureDataUrl: signatureDataUrl }, function(response) {
+                // Handle the response (e.g., display the signed PDF)
+                console.log(response);
+            });
+            */
+        }
+
+    
+    </script>
+{% endblock %}
+
+
+
